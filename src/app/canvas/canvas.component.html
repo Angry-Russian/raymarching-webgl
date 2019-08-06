@@ -1,0 +1,27 @@
+<canvas #renderer></canvas>
+<aside style="position: fixed; top: 0; left: 0; bottom: 0; background: #eee; min-width: 100px;  ">
+    <ul>
+        <li>
+            <label>raysPerPixel<input type="number" [(ngModel)]="Settings.raysPerPixel" size="2"></label>
+        </li>
+        <li>
+            <label>bounceLimit<input type="number" [(ngModel)]="Settings.bounceLimit" size="2"></label>
+        </li>
+        <li>
+            <label>depthOfField<input type="number" [(ngModel)]="Settings.depthOfField" size="2"></label>
+        </li>
+        <li>
+            <label>gravityStrength<input type="number" [(ngModel)]="Settings.gravityStrength" size="2"></label>
+        </li>
+        <li>
+            <label>lightSpeed<input type="number" [(ngModel)]="Settings.lightSpeed" size="9"></label>
+        </li>
+        <li>
+            <label>gravityExponent<input type="number" [(ngModel)]="Settings.gravityExponent" size="1"></label>
+        </li>
+        <li>
+            Avg FPS: {{ (1. / averageRenderTime).toFixed(1) }}
+        </li>
+    </ul>
+    <button (click)="drawFrame()" [disabled]="!isReady"> redraw </button>
+</aside>
