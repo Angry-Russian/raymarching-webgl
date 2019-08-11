@@ -71,7 +71,7 @@ const State = {
     -0.5, 0,  4,
      0.5, 0,  4,
      1.5, 0,  4,
-     0.0, 0, -1,
+     0.0, 0, -10,
   ]),
   ballVelocities:  new Float32Array([
      0.0, 0,  1,
@@ -119,7 +119,7 @@ export class CanvasComponent implements OnInit {
   async start() {
 
     const rollingAverage = [];
-    const draw = () => {
+    const draw = (play) => {
 
       this.drawFrame();
       const end = Date.now();
@@ -130,9 +130,10 @@ export class CanvasComponent implements OnInit {
 
       const length = rollingAverage.length;
       this.averageRenderTime = rollingAverage.reduce((prev, current) => prev + current / length);
-      console.log(`Rendered in ${delta}ms, avg: ${(1 / this.averageRenderTime).toFixed(0)}fps`);
-
-      // window.requestAnimationFrame(draw);
+      // console.log(`Rendered in ${delta}ms, avg: ${(1 / this.averageRenderTime).toFixed(0)}fps`);
+      if (draw) {
+        window.requestAnimationFrame(draw);
+      }
     };
 
     this.lastTimestamp = Date.now();
@@ -143,7 +144,9 @@ export class CanvasComponent implements OnInit {
     this.isReady = true;
     this.isPlaying = Settings.startOnLoad;
     this.lastTimestamp = Date.now();
-    draw();
+
+    draw(Settings.startOnLoad);
+    setInterval(() => this.update(), 1000 / 60);
   }
 
   async setupWebGL() {
@@ -180,7 +183,7 @@ export class CanvasComponent implements OnInit {
         case 'q' : State.movement.up = true; break;
         case 'e' : State.movement.down = true; break;
         case 'r' : Settings.cameraPosition = [...defaultSettings.cameraPosition]; break;
-        default: console.log('KEYDOWN', e);
+        // default: console.log('KEYDOWN', e);
       }
     }, false);
     document.addEventListener('keyup', (e) => {
@@ -191,7 +194,7 @@ export class CanvasComponent implements OnInit {
         case 'd' : State.movement.right = false; break;
         case 'q' : State.movement.up = false; break;
         case 'e' : State.movement.down = false; break;
-        default: console.log('KEYUP', e);
+        // default: console.log('KEYUP', e);
       }
     }, false);
     document.addEventListener('mousemove', (e: MouseEvent) => {
@@ -287,13 +290,13 @@ export class CanvasComponent implements OnInit {
 
     // NOTE: In here it should just be the uniforms I'm gonna CHANGE
     this.gl.uniform4fv(this.programInfo.uniformLocations.sphereColors, new Float32Array([
-      0,  0,  1, 0.90,
-      0,  1,  0, 0.10,
-      0,  1,  1, 0.80,
-      1,  0,  0, 0.20,
-      0,  0,  0, 0.70,
-      1,  1,  0, 0.30,
-      1, .5,  0, 0.60,
+     .2,  0,  1, 0.90,
+     .2,  1,  0, 0.10,
+     .2,  1,  1, 0.80,
+      1,  0, .2, 0.20,
+      0,  0, .2, 0.70,
+      1,  1, .2, 0.30,
+      1, .5, .2, 0.60,
       1,  0, .5, 0.40,
      .5,  1,  0, 0.45,
      .5,  0,  1, 0.55,
